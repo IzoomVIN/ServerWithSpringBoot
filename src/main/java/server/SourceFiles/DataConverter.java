@@ -59,7 +59,7 @@ public class DataConverter {
         }
     }
 
-    public static String RowAdapter(DBHandler dbh, String type, SuicideStatisticsRow row) {
+    public static String rowAdapter(DBHandler dbh, String type, SuicideStatisticsRow row) {
         boolean checkFlag = checkOnPrimaryKey(dbh,row);
         if(!checkFlag && type.equals("add")){
             dbh.setInformationToTable(row);

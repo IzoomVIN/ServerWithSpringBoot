@@ -63,6 +63,25 @@ public class DBHandler {
         }
     }
 
+    void setInformationToTable(SuicideStatisticsRow row){
+        try(PreparedStatement statement = this.connection.prepareStatement("INSERT INTO suicide " +
+                "('Country', 'Year', 'Sex', 'Age', 'Suicides_Count', " +
+                "'Population', 'Suicides_to_100_K_Population') " +
+                "VALUES(?,?,?,?,?,?,?)")){
+            statement.setObject(1, row.getCountry());
+            statement.setObject(2, row.getYear());
+            statement.setObject(3, row.getSex());
+            statement.setObject(4, row.getAge());
+            statement.setObject(5, row.getSuicidesCount());
+            statement.setObject(6, row.getPopulation());
+            statement.setObject(7, row.getSuicidesTo100KPopulation());
+
+            statement.executeUpdate();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+
     List<Integer> getAllYear(){
         // Statement is use for completing SQL search
         try(Statement statement = this.connection.createStatement()){
@@ -112,63 +131,6 @@ public class DBHandler {
         }
     }
 
-    void setInformationToTable(SuicideStatisticsRow row){
-        try(PreparedStatement statement = this.connection.prepareStatement("INSERT INTO suicide " +
-                "('Country', 'Year', 'Sex', 'Age', 'Suicides_Count', " +
-                "'Population', 'Suicides_to_100_K_Population') " +
-                "VALUES(?,?,?,?,?,?,?)")){
-            statement.setObject(1, row.getCountry());
-            statement.setObject(2, row.getYear());
-            statement.setObject(3, row.getSex());
-            statement.setObject(4, row.getAge());
-            statement.setObject(5, row.getSuicidesCount());
-            statement.setObject(6, row.getPopulation());
-            statement.setObject(7, row.getSuicidesTo100KPopulation());
-
-            statement.executeUpdate();
-        }catch (SQLException e){
-            e.printStackTrace();
-        }
-    }
-
-    void updateInformationToTable(SuicideStatisticsRow row) {
-        String sql = "UPDATE suicide " +
-                "SET Suicides_Count = ?, Population = ?, Suicides_to_100_K_Population = ? " +
-                "WHERE Country = ? AND Year = ? AND Sex = ? AND Age = ?;";
-        try(PreparedStatement statement = this.connection.prepareStatement(sql)){
-            statement.setObject(1, row.getSuicidesCount());
-            statement.setObject(2, row.getPopulation());
-            statement.setObject(3, row.getSuicidesTo100KPopulation());
-            statement.setObject(4, row.getCountry());
-            statement.setObject(5, row.getYear());
-            statement.setObject(6, row.getSex());
-            statement.setObject(7, row.getAge());
-
-            statement.executeUpdate();
-        }catch (SQLException e){
-            e.printStackTrace();
-        }
-    }
-
-    void deleteRowByKey(String country, int year, String sex, String age) {
-        String sql = "DELETE FROM suicide " +
-                "WHERE Country = ? AND " +
-                "Year = ? AND " +
-                "Sex = ? AND " +
-                "Age = ?;";
-        // Statement is use for completing SQL search
-        try(PreparedStatement statement = this.connection.prepareStatement(sql)){
-            statement.setObject(1, country);
-            statement.setObject(2, year);
-            statement.setObject(3, sex);
-            statement.setObject(4, age);
-
-            statement.executeUpdate();
-        }catch(SQLException e){
-            e.printStackTrace();
-        }
-    }
-
     public SuicideStatisticsRow getOneRowByKey(String country, int year, String sex, String age){
         // Statement is use for completing SQL search
         try(Statement statement = this.connection.createStatement()){
@@ -207,6 +169,44 @@ public class DBHandler {
             return resultRow;
         }catch(SQLException e){
             return null;
+        }
+    }
+
+    void updateInformationToTable(SuicideStatisticsRow row) {
+        String sql = "UPDATE suicide " +
+                "SET Suicides_Count = ?, Population = ?, Suicides_to_100_K_Population = ? " +
+                "WHERE Country = ? AND Year = ? AND Sex = ? AND Age = ?;";
+        try(PreparedStatement statement = this.connection.prepareStatement(sql)){
+            statement.setObject(1, row.getSuicidesCount());
+            statement.setObject(2, row.getPopulation());
+            statement.setObject(3, row.getSuicidesTo100KPopulation());
+            statement.setObject(4, row.getCountry());
+            statement.setObject(5, row.getYear());
+            statement.setObject(6, row.getSex());
+            statement.setObject(7, row.getAge());
+
+            statement.executeUpdate();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+    void deleteRowByKey(String country, int year, String sex, String age) {
+        String sql = "DELETE FROM suicide " +
+                "WHERE Country = ? AND " +
+                "Year = ? AND " +
+                "Sex = ? AND " +
+                "Age = ?;";
+        // Statement is use for completing SQL search
+        try(PreparedStatement statement = this.connection.prepareStatement(sql)){
+            statement.setObject(1, country);
+            statement.setObject(2, year);
+            statement.setObject(3, sex);
+            statement.setObject(4, age);
+
+            statement.executeUpdate();
+        }catch(SQLException e){
+            e.printStackTrace();
         }
     }
 }

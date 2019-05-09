@@ -42,7 +42,7 @@ public class DataController {
         if (row == null){
             return String.format("false!!!, %s", rowJSON);
         }
-        return RowAdapter(dbh, operationId, row);
+        return rowAdapter(dbh, operationId, row);
     }
 
     @DeleteMapping(path = "/row/delete")
